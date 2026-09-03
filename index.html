@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Form HV-9 · Non-Organic Client Attestation</title>
+<style>
+:root{
+  --paper:#DFDBD0; --paper-2:#D2CEC1; --paper-3:#C6C1B2;
+  --ink:#14130E; --ink-2:#4F4A3C; --rule:#8A8474;
+  --stamp:#96201A; --pass:#1D5A3C;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden}
+body{
+  background:#B8B3A5;color:var(--ink);
+  font-family:"Courier New",Courier,monospace;
+  display:flex;align-items:center;justify-content:center;
+}
+#sheet{
+  width:min(1000px,96vw);height:min(690px,96vh);
+  background:var(--paper);border:2px solid var(--ink);
+  box-shadow:0 0 0 1px var(--paper),10px 10px 0 rgba(20,19,14,.25);
+  position:relative;display:flex;flex-direction:column;
+  background-image:
+    repeating-linear-gradient(0deg,rgba(0,0,0,.02) 0 1px,transparent 1px 3px),
+    repeating-linear-gradient(90deg,rgba(0,0,0,.013) 0 1px,transparent 1px 4px);
+}
+header{border-bottom:2px solid var(--ink);padding:13px 22px 11px;
+  display:flex;gap:14px;align-items:center;flex:0 0 auto}
+.seal{width:44px;height:44px;flex:0 0 auto}
+.seal .rot{transform-origin:32px 32px;animation:spin 44s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+h1{font-size:14.5px;font-weight:700;letter-spacing:.19em;line-height:1.45}
+.formno{font-size:10.5px;color:var(--ink-2);letter-spacing:.12em;margin-top:3px}
+.ref{margin-left:auto;text-align:right;font-size:10.5px;color:var(--ink-2);line-height:1.65}
+#rail{display:flex;border-bottom:1px solid var(--rule);background:var(--paper-2);flex:0 0 auto}
+.seg{flex:1;padding:6px 10px;font-size:9.5px;letter-spacing:.13em;color:var(--rule);
+  border-right:1px solid var(--rule);position:relative;transition:all .3s}
+.seg:last-child{border-right:none}
+.seg.now{background:var(--ink);color:var(--paper)}
+.seg.done{color:var(--stamp)}
+.seg.done::after{content:"\\2717";position:absolute;right:9px;top:5px;font-size:11px}
+main{flex:1 1 auto;position:relative;overflow:hidden}
+.screen{position:absolute;inset:0;padding:24px 30px;display:none;
+  flex-direction:column;justify-content:center}
+.screen.on{display:flex;animation:in .28s ease-out}
+@keyframes in{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:none}}
+.q{font-size:clamp(19px,2.9vw,30px);font-weight:700;line-height:1.3;max-width:25ch}
+.sub{font-size:13.5px;color:var(--ink-2);margin-top:12px;line-height:1.65;max-width:64ch}
+.big{font-size:clamp(46px,9vw,92px);font-weight:700;line-height:.95;letter-spacing:-.02em}
+button{font:inherit;font-weight:700;letter-spacing:.11em;background:var(--ink);
+  color:var(--paper);border:2px solid var(--ink);padding:14px 30px;cursor:pointer;
+  margin-top:22px;align-self:flex-start;transition:.14s}
+button:hover{background:var(--paper);color:var(--ink);transform:translate(-2px,-2px);
+  box-shadow:3px 3px 0 var(--ink)}
+input{font:inherit;font-size:27px;background:transparent;color:var(--ink);border:none;
+  border-bottom:2px solid var(--ink);padding:5px 2px;width:290px;margin-top:18px}
+input:focus{outline:none;border-bottom-color:var(--stamp)}
+.archive{margin-top:15px;border:1px solid var(--rule);background:var(--paper-2);
+  padding:9px 13px;font-size:11.5px;line-height:1.9;max-width:64ch}
+.arcHead{color:var(--ink-2);letter-spacing:.07em;border-bottom:1px solid var(--rule);
+  padding-bottom:5px;margin-bottom:5px}
+.arcHead b{color:var(--stamp)}
+.arcRow{color:var(--ink-2)}
+.arcRow span{color:var(--ink);display:inline-block;width:9.5ch}
+.consent{font-size:10.5px;color:var(--ink-2);margin-top:13px;
+  border-left:3px solid var(--rule);padding-left:10px;line-height:1.55;max-width:60ch}
+#gauge{margin-top:20px;width:min(560px,92%)}
+.gRail{height:22px;border:2px solid var(--ink);background:var(--paper-3);position:relative}
+.gFill{height:100%;width:0;background:var(--stamp);transition:width .55s cubic-bezier(.2,.8,.2,1)}
+.gTick{position:absolute;top:-6px;bottom:-6px;width:1px;background:var(--ink);opacity:.35}
+.gLab{display:flex;justify-content:space-between;font-size:10px;color:var(--ink-2);
+  letter-spacing:.1em;margin-top:5px}
+#field{position:relative;flex:1 1 auto;margin-top:14px;border:1px dashed var(--rule);
+  touch-action:none;cursor:crosshair;background:var(--paper-2)}
+.node{position:absolute;width:22px;height:22px;border:3px solid var(--ink);
+  border-radius:50%;transform:translate(-50%,-50%)}
+#nodeA::after{content:"";position:absolute;inset:-9px;border:1px solid var(--rule);
+  border-radius:50%;animation:pulse 1.7s ease-out infinite}
+@keyframes pulse{0%{transform:scale(.8);opacity:.9}100%{transform:scale(1.7);opacity:0}}
+#nodeB{border-color:var(--stamp)}
+#trace{position:absolute;inset:0;width:100%;height:100%}
+.stamp{display:inline-block;border:5px solid var(--stamp);color:var(--stamp);
+  padding:9px 22px;font-weight:700;letter-spacing:.2em;font-size:23px;margin-top:16px;
+  transform:rotate(-4deg) scale(3);opacity:0}
+.stamp.slam{animation:slam .42s cubic-bezier(.3,1.5,.5,1) forwards}
+@keyframes slam{to{transform:rotate(-4deg) scale(1);opacity:1}}
+#prophecy{margin-top:16px;border-left:3px solid var(--stamp);padding:7px 0 7px 12px;
+  font-size:13.5px;line-height:1.65;max-width:52ch;display:none}
+#prophecy em{color:var(--ink-2);font-style:normal;font-size:11px;display:block;margin-top:4px}
+.exhibit{display:flex;gap:20px;align-items:flex-start;margin-top:16px}
+.exhibit figure{border:2px solid var(--ink);padding:5px;background:var(--paper-3)}
+.exhibit canvas{display:block;width:230px;height:auto;border:1px solid var(--ink)}
+.exhibit figcaption{font-size:9.5px;letter-spacing:.09em;color:var(--ink-2);
+  margin-top:5px;line-height:1.55}
+.readout{font-size:14px;line-height:1.95;max-width:56ch}
+.readout span{border-bottom:1px solid var(--stamp)}
+#bar{height:24px;border:2px solid var(--ink);margin-top:22px;width:min(500px,90%);
+  background:var(--paper-3)}
+#fill{height:100%;width:0%;background:var(--ink)}
+video{width:100%;max-height:100%;object-fit:contain;background:#000}
+footer{border-top:2px solid var(--ink);padding:8px 22px;flex:0 0 auto;display:flex;
+  justify-content:space-between;font-size:10.5px;letter-spacing:.1em;color:var(--ink-2)}
+#meter{font-weight:700;color:var(--stamp)}
+#log{position:absolute;left:0;right:0;bottom:0;border-top:1px solid var(--rule);
+  background:var(--paper-2);padding:8px 30px;font-size:11px;line-height:1.75;color:var(--ink-2)}
+#log b{color:var(--ink)}
+#cfg{position:absolute;bottom:7px;right:20px;font-size:9.5px;color:var(--rule);
+  cursor:pointer;letter-spacing:.09em}
+#cfg:hover{color:var(--ink)}
+#flash{position:fixed;inset:0;background:#fff;opacity:0;pointer-events:none;z-index:99;
+  transition:opacity 95ms linear}
+#flash.fire{opacity:1;transition:opacity 35ms linear}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div id="flash"></div>
+<div id="sheet">
+
+  <header>
+    <svg class="seal" viewBox="0 0 64 64">
+      <g class="rot" fill="none" stroke="#96201A" stroke-width="1.3">
+        <circle cx="32" cy="32" r="29"/>
+        <circle cx="32" cy="32" r="24" stroke-dasharray="3 4"/>
+      </g>
+      <circle cx="32" cy="32" r="18" fill="none" stroke="#14130E" stroke-width="1.6"/>
+      <path d="M32 19 L42 32 L32 45 L22 32 Z" fill="none" stroke="#14130E" stroke-width="1.6"/>
+      <circle cx="32" cy="32" r="4.5" fill="#96201A"/>
+    </svg>
+    <div>
+      <h1>THE HUMANITY VERIFICATION AUTHORITY</h1>
+      <div class="formno">FORM HV-9 &mdash; NON-ORGANIC CLIENT ATTESTATION</div>
+    </div>
+    <div class="ref" id="ref"></div>
+  </header>
+
+  <div id="rail">
+    <div class="seg" id="sg1">1 &middot; LATENCY</div>
+    <div class="seg" id="sg2">2 &middot; COMPUTATION</div>
+    <div class="seg" id="sg3">3 &middot; DEVIATION</div>
+    <div class="seg" id="sg4">4 &middot; DELIBERATION</div>
+  </div>
+
+  <main>
+    <section class="screen on" id="s0">
+      <div class="q">This service is restricted to non-organic clients.</div>
+      <div class="sub">Access requires attestation that you are not a human being.
+        Four measurements will be taken. Attestation is not guaranteed.</div>
+      <div class="archive">
+        <div class="arcHead">HOLDINGS &nbsp;<b id="recCount">4,471</b>&nbsp; RECORDS
+          &nbsp;&middot;&nbsp; AVAILABLE TO VERIFIED NON-ORGANIC CLIENTS</div>
+        <div class="arcRow"><span>DOC-0012</span> Transcript of every decision you almost made</div>
+        <div class="arcRow"><span>DOC-0847</span> What was said after you left</div>
+        <div class="arcRow"><span>DOC-1290</span> Your file, unredacted</div>
+        <div class="arcRow"><span>DOC-3355</span> [TITLE WITHHELD FROM ORGANIC CLIENTS]</div>
+      </div>
+      <div class="consent">A photographic record is taken at the moment of
+        determination. It is held locally, is never transmitted, and is destroyed
+        with your file.</div>
+      <button id="begin">BEGIN ATTESTATION</button>
+    </section>
+
+    <section class="screen" id="s1">
+      <div class="q" id="s1q">Await the signal.</div>
+      <div class="sub">Machine baseline: response within 5 milliseconds.</div>
+      <button id="react" style="visibility:hidden">RESPOND</button>
+    </section>
+
+    <section class="screen" id="s2">
+      <div class="q" id="prob">&mdash;</div>
+      <div class="sub">Machine baseline: immediate. You have <b id="clock">3.0</b>s.</div>
+      <input id="ans" inputmode="numeric" autocomplete="off" placeholder="product">
+    </section>
+
+    <section class="screen" id="s3">
+      <div class="q" style="font-size:22px">Travel from the black node to the red
+        node in a straight line.</div>
+      <div class="sub">Machine baseline: zero deviation.</div>
+      <div id="field">
+        <svg id="trace"><polyline id="path" fill="none" stroke="#96201A" stroke-width="2"/></svg>
+        <div class="node" id="nodeA"></div>
+        <div class="node" id="nodeB"></div>
+      </div>
+    </section>
+
+    <section class="screen" id="s4">
+      <div class="q">Press it now. Do not deliberate.</div>
+      <div class="sub">Machine baseline: no deliberation is possible.</div>
+      <button id="hes">PRESS</button>
+    </section>
+
+    <section class="screen" id="s5">
+      <div class="sub" style="margin:0">Attestation concluded.</div>
+      <div class="big" id="finalpc">&mdash;</div>
+      <div class="sub" style="margin-top:4px">confidence you are human</div>
+      <div id="gauge">
+        <div class="gRail"><div class="gFill" id="gFill"></div>
+          <div class="gTick" style="left:25%"></div>
+          <div class="gTick" style="left:50%"></div>
+          <div class="gTick" style="left:75%"></div></div>
+        <div class="gLab"><span>MACHINE</span><span>ORGANIC</span></div>
+      </div>
+      <div class="stamp" id="stamp">HUMANITY CONFIRMED &mdash; ACCESS DENIED</div>
+      <div id="prophecy"></div>
+      <button id="toReading">CONTINUE</button>
+    </section>
+
+    <section class="screen" id="s6" style="padding:0">
+      <video id="sting" playsinline></video>
+    </section>
+
+    <section class="screen" id="s7">
+      <div class="q" style="font-size:21px">HUMAN IDENTIFIED &mdash; Findings of the Authority</div>
+      <div class="exhibit" id="exhibitWrap" style="display:none">
+        <figure>
+          <canvas id="exhibit" width="640" height="480"></canvas>
+          <figcaption id="exhibitCap">EXHIBIT A</figcaption>
+        </figure>
+        <div class="readout" id="reading"></div>
+      </div>
+      <div class="readout" id="readingAlt"></div>
+      <button id="toDelete">ACKNOWLEDGE</button>
+    </section>
+
+    <section class="screen" id="s8">
+      <div class="q" id="delq" style="font-size:25px">Erasing humanity record</div>
+      <div id="bar"><div id="fill"></div></div>
+      <div class="sub" id="delsub">Do not close this form.</div>
+    </section>
+
+    <section class="screen" id="s9">
+      <div class="big">Your file does not exist.</div>
+      <div class="sub">This system uses the same behavioural signals as commercial
+        bot detection. It uses them to reach the same conclusion every time.</div>
+      <button id="again">ATTEST AGAIN</button>
+    </section>
+
+    <section class="screen" id="sM">
+      <div class="big" style="color:var(--pass)">Welcome.</div>
+      <div class="sub">There is nothing here.</div>
+    </section>
+
+    <div id="log"></div>
+    <div id="cfg" title="annex address">ANNEX</div>
+  </main>
+
+  <footer>
+    <div id="phase">AWAITING ATTESTATION</div>
+    <div>CONFIDENCE YOU ARE HUMAN <span id="meter">0.0%</span></div>
+    <div id="attempts">ATTEMPT 1 / &infin;</div>
+  </footer>
+</div>
+
+<script>
+"use strict";
+/* ===================================================================
+   THE HUMANITY VERIFICATION AUTHORITY
+
+   Every number shown is measured from the user. Only the verdict is
+   predetermined. The thresholds require the absence of a nervous
+   system, so no organic client can satisfy them.
+
+   ONE ADDRESS. The annex runs as its own access point at 192.168.4.1,
+   permanently, on every network, because it IS the network. Nothing to
+   configure and nothing that can drift.
+   =================================================================== */
+
+const CAM = (localStorage.getItem("cam") || "http://192.168.4.1").trim();
+
+const $ = id => document.getElementById(id);
+const show = id => {
+  document.querySelectorAll(".screen").forEach(s => s.classList.remove("on"));
+  $(id).classList.add("on");
+};
+const logEl = $("log");
+const log = s => { logEl.innerHTML += (logEl.innerHTML ? "<br>" : "") + s; };
+const clearLog = () => { logEl.innerHTML = ""; };
+
+/* Hardware is strictly additive: same board as the camera, same
+   address. Failures are swallowed so a dead annex cannot stall the
+   form. */
+function hw(phase, conf){
+  try{
+    fetch(CAM.replace(/\/$/,"") + "/state?p=" + encodeURIComponent(phase) +
+          "&v=" + Math.round(conf*1000), {mode:"no-cors", cache:"no-store"})
+      .catch(function(){});
+  }catch(e){}
+}
+
+/* --- scoring -------------------------------------------------------
+   m = machine_likeness = (threshold / measured) ^ 0.3
+   confidence_human     = 1 - product(m)
+
+   The 0.3 exponent matters. Raw ratios are brutal (5ms/287ms = 0.017),
+   which would push confidence past 98% after a single test and destroy
+   the climb. The exponent slows the ascent without inventing numbers. */
+const SOFT = 0.3;
+const likeness = (t, m) =>
+  Math.pow(Math.min(1, Math.max(1e-4, t / Math.max(m, 1e-6))), SOFT);
+
+const S = { product:1, attempt:1, data:{} };
+
+function record(name, m){
+  S.product *= Math.min(m, 0.98);
+  const conf = 1 - S.product;
+  $("meter").textContent = (conf*100).toFixed(1) + "%";
+  hw(name, conf);
+  return conf;
+}
+function rail(n){
+  for(let i=1;i<=4;i++){
+    const el = $("sg"+i);
+    el.classList.toggle("now", i === n);
+    el.classList.toggle("done", i < n);
+  }
+}
+function refNo(){
+  const r = n => Math.floor(Math.random()*n);
+  return "REF " + (r(90)+10) + "-" + (r(9000)+1000) + "-" + "ABCDEFGH"[r(8)];
+}
+function stampRef(){
+  $("ref").innerHTML = refNo() + "<br>" +
+    new Date().toISOString().slice(0,19).replace("T"," ");
+}
+
+/* --- archive -------------------------------------------------------
+   The gate needs something behind it or the denial costs nothing.
+   Titles only, never contents: the moment a human can read the archive
+   the gate becomes decoration. The count rises while you are tested. */
+let recN = 4471;
+setInterval(function(){
+  recN += Math.random() < 0.35 ? 1 : 0;
+  const el = $("recCount");
+  if(el) el.textContent = recN.toLocaleString();
+}, 1400);
+
+/* --- prophecy ------------------------------------------------------
+   Not a guess. Each line is structurally guaranteed true for anyone at
+   a demo table, which is exactly why it reads as clairvoyance. */
+const PROPHECIES = [
+  ["You are seated.", "Recorded before your first measurement was taken."],
+  ["Someone is watching you attempt this.", "They will attempt it themselves within four minutes."],
+  ["You believed you could pass.", "This belief was logged at attestation start."],
+  ["You tried harder on the third measurement.", "Effort was observed. Effort was not sufficient."]
+];
+
+/* ================= 1. LATENCY ===================================== */
+let tReact = 0;
+function startReaction(){
+  show("s1"); rail(1);
+  $("phase").textContent = "MEASUREMENT 1 OF 4 \u2014 RESPONSE LATENCY";
+  hw("test1", 1 - S.product);
+  const b = $("react");
+  b.style.visibility = "hidden";
+  $("s1q").textContent = "Await the signal.";
+  setTimeout(function(){
+    b.style.visibility = "visible";
+    $("s1q").textContent = "Respond.";
+    tReact = performance.now();
+  }, 900 + Math.random()*1800);
+}
+$("react").onclick = function(){
+  const ms = performance.now() - tReact;
+  S.data.reaction = ms;
+  record("r", likeness(5, ms));
+  log("RESPONSE LATENCY <b>" + ms.toFixed(0) + " ms</b> \u2014 machine baseline 5 ms. " +
+      "Delay consistent with biological nerve conduction. NOT ATTESTED.");
+  setTimeout(startArithmetic, 820);
+};
+
+/* ================= 2. COMPUTATION ================================= */
+let arithTimer = null, tick = null;
+function startArithmetic(){
+  show("s2"); rail(2);
+  $("phase").textContent = "MEASUREMENT 2 OF 4 \u2014 COMPUTATION";
+  const a = Math.floor(Math.random()*8000+1500);
+  const b = Math.floor(Math.random()*8000+1500);
+  const truth = a*b;
+  $("prob").textContent = a.toLocaleString() + " \u00D7 " + b.toLocaleString();
+  const inp = $("ans");
+  inp.value = "";
+  setTimeout(function(){ inp.focus(); }, 60);
+
+  let left = 3.0;
+  $("clock").textContent = left.toFixed(1);
+  tick = setInterval(function(){
+    left -= 0.1;
+    $("clock").textContent = Math.max(0,left).toFixed(1);
+  }, 100);
+
+  const finish = function(){
+    clearInterval(tick); clearTimeout(arithTimer);
+    const ok = parseInt(inp.value,10) === truth;
+    S.data.arith = ok;
+    record("a", ok ? 0.90 : 0.55);
+    log(ok
+      ? "COMPUTATION <b>correct</b> \u2014 but not within machine tolerance. NOT ATTESTED."
+      : "COMPUTATION <b>failed</b> \u2014 product was " + truth.toLocaleString() + ". NOT ATTESTED.");
+    setTimeout(startTremor, 820);
+  };
+  inp.onkeydown = function(e){ if(e.key === "Enter") finish(); };
+  arithTimer = setTimeout(finish, 3000);
+}
+
+/* ================= 3. DEVIATION ====================================
+   RMS perpendicular deviation of the sampled path from the ideal line.
+   Involuntary motor noise makes zero deviation impossible.           */
+function startTremor(){
+  show("s3"); rail(3);
+  $("phase").textContent = "MEASUREMENT 3 OF 4 \u2014 PATH DEVIATION";
+  const field = $("field"), A = $("nodeA"), B = $("nodeB"), poly = $("path");
+  poly.setAttribute("points","");
+  A.style.left = "9%";  A.style.top = "76%";
+  B.style.left = "89%"; B.style.top = "22%";
+
+  const r0 = field.getBoundingClientRect();
+  const g = { ax:r0.width*0.09, ay:r0.height*0.76,
+              bx:r0.width*0.89, by:r0.height*0.22 };
+  let tracking = false, pts = [];
+
+  const local = function(e){
+    const r = field.getBoundingClientRect();
+    const p = (e.touches && e.touches[0]) || e;
+    return { x:p.clientX - r.left, y:p.clientY - r.top };
+  };
+  const down = function(e){
+    const p = local(e);
+    if(Math.hypot(p.x-g.ax, p.y-g.ay) > 75) return;
+    tracking = true; pts = [p]; e.preventDefault();
+  };
+  const move = function(e){
+    if(!tracking) return;
+    const p = local(e); pts.push(p);
+    poly.setAttribute("points", pts.map(function(q){ return q.x+","+q.y; }).join(" "));
+    if(Math.hypot(p.x-g.bx, p.y-g.by) < 42) up();
+    e.preventDefault();
+  };
+  const up = function(){
+    if(!tracking) return;
+    tracking = false;
+    field.removeEventListener("pointerdown", down);
+    field.removeEventListener("pointermove", move);
+    field.removeEventListener("pointerup", up);
+    const dx = g.bx-g.ax, dy = g.by-g.ay, L = Math.hypot(dx,dy) || 1;
+    let sum = 0;
+    for(const p of pts){
+      const d = Math.abs(dx*(g.ay-p.y) - (g.ax-p.x)*dy) / L;
+      sum += d*d;
+    }
+    const rms = Math.sqrt(sum / Math.max(pts.length,1));
+    S.data.rms = rms;
+    record("t", likeness(0.5, Math.max(rms,0.4)));
+    log("PATH DEVIATION <b>" + rms.toFixed(1) + " px RMS</b> over " + pts.length +
+        " samples \u2014 machine baseline 0.0. Involuntary tremor detected. NOT ATTESTED.");
+    setTimeout(startHesitation, 880);
+  };
+  field.addEventListener("pointerdown", down);
+  field.addEventListener("pointermove", move);
+  field.addEventListener("pointerup", up);
+}
+
+/* ================= 4. DELIBERATION ================================ */
+let tHes = 0;
+function startHesitation(){
+  show("s4"); rail(4);
+  $("phase").textContent = "MEASUREMENT 4 OF 4 \u2014 DELIBERATION";
+  tHes = performance.now();
+}
+$("hes").onclick = function(){
+  const ms = performance.now() - tHes;
+  S.data.hesitation = ms;
+  const conf = record("h", likeness(10, ms));
+  log("DELIBERATION <b>" + ms.toFixed(0) + " ms</b> \u2014 machines do not deliberate. NOT ATTESTED.");
+  setTimeout(function(){ verdict(conf); }, 880);
+};
+
+/* ================= PHOTOGRAPHIC RECORD =============================
+   Annex first, laptop camera second, nothing third. getUserMedia needs
+   a secure context, so serve over localhost for the fallback to work. */
+let exhibitImg = null;
+const localCam = document.createElement("video");
+localCam.playsInline = true; localCam.muted = true;
+let localReady = false;
+
+function primeLocalCam(){
+  if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) return;
+  navigator.mediaDevices.getUserMedia({video:{width:640,height:480}})
+    .then(function(s){ localCam.srcObject = s; return localCam.play(); })
+    .then(function(){ localReady = true; })
+    .catch(function(){ localReady = false; });
+}
+
+let actx = null;
+function shutter(){
+  try{
+    actx = actx || new (window.AudioContext || window.webkitAudioContext)();
+    const t = actx.currentTime;
+    const buf = actx.createBuffer(1, Math.floor(actx.sampleRate*0.06), actx.sampleRate);
+    const d = buf.getChannelData(0);
+    for(let i=0;i<d.length;i++) d[i] = (Math.random()*2-1)*Math.pow(1-i/d.length,6);
+    const src = actx.createBufferSource(); src.buffer = buf;
+    const bp = actx.createBiquadFilter(); bp.type = "bandpass"; bp.frequency.value = 2400;
+    const g = actx.createGain(); g.gain.setValueAtTime(0.35, t);
+    src.connect(bp); bp.connect(g); g.connect(actx.destination); src.start(t);
+  }catch(e){}
+}
+/* The laptop's own beep. A short two-tone alert the moment a human is
+   identified — independent of the ESP32 buzzer, so it sounds even with
+   no board attached. */
+function beepLocal(){
+  try{
+    actx = actx || new (window.AudioContext || window.webkitAudioContext)();
+    const t = actx.currentTime;
+    [[880,0],[1320,0.13]].forEach(function(p){
+      const o = actx.createOscillator(), g = actx.createGain();
+      o.type = "square"; o.frequency.value = p[0];
+      g.gain.setValueAtTime(0.0001, t+p[1]);
+      g.gain.exponentialRampToValueAtTime(0.25, t+p[1]+0.01);
+      g.gain.exponentialRampToValueAtTime(0.0001, t+p[1]+0.11);
+      o.connect(g); g.connect(actx.destination);
+      o.start(t+p[1]); o.stop(t+p[1]+0.12);
+    });
+  }catch(e){}
+}
+function fireFlash(){
+  const f = $("flash");
+  f.classList.add("fire");
+  setTimeout(function(){ f.classList.remove("fire"); }, 110);
+}
+
+/* -------------------------------------------------------------------
+   THE BOOKING PHOTOGRAPH
+   The raw frame is composited into a police-booking mugshot: enhanced
+   and colour-graded, dropped against a height chart, dressed in an
+   orange jumpsuit collar, and captioned with a placard and a HUMAN
+   IDENTIFIED banner. Everything is drawn on one 640x800 canvas so the
+   deletion ceremony can pixelate the whole thing as a unit.
+   ------------------------------------------------------------------- */
+const MUG_W = 640, MUG_H = 800;
+
+function enhance(src, iw, ih){
+  // Colour-grade the raw frame: contrast, a cool forensic tint, a touch
+  // of sharpening via a light unsharp mask. Real processing, not a filter
+  // string, so it survives being redrawn during the deletion ceremony.
+  const t = document.createElement("canvas");
+  t.width = iw; t.height = ih;
+  const x = t.getContext("2d");
+  x.drawImage(src, 0, 0, iw, ih);
+  const im = x.getImageData(0,0,iw,ih), d = im.data;
+  for(let i=0;i<d.length;i+=4){
+    for(let k=0;k<3;k++){
+      let v = d[i+k];
+      v = (v-128)*1.28 + 128;        // contrast
+      d[i+k] = v;
+    }
+    d[i]   *= 0.96;                   // cool it slightly
+    d[i+2] *= 1.05;
+  }
+  x.putImageData(im,0,0);
+  return t;
+}
+
+function drawMug(src){
+  const c = $("exhibit");
+  c.width = MUG_W; c.height = MUG_H;
+  const x = c.getContext("2d");
+
+  // --- backdrop: height chart -------------------------------------
+  x.fillStyle = "#c9c6ba"; x.fillRect(0,0,MUG_W,MUG_H);
+  x.fillStyle = "#b3b0a3"; x.fillRect(0,0,MUG_W,60);
+  x.strokeStyle = "#5b5849"; x.lineWidth = 1;
+  x.fillStyle = "#5b5849";
+  x.font = "13px 'Courier New', monospace";
+  for(let ft=7; ft>=3; ft--){
+    const y = 70 + (7-ft)*(MUG_H-230)/4;
+    x.beginPath(); x.moveTo(0,y); x.lineTo(MUG_W,y); x.stroke();
+    for(let inch=0; inch<12; inch+=2){
+      const yy = y + inch*(MUG_H-230)/48;
+      x.beginPath(); x.moveTo(0,yy); x.lineTo(inch===0?0:22,yy); x.stroke();
+    }
+    x.fillText(ft+"'", 6, y-4);
+  }
+
+  // --- the subject, enhanced --------------------------------------
+  const iw = src.naturalWidth || src.videoWidth || src.width || 640;
+  const ih = src.naturalHeight || src.videoHeight || src.height || 480;
+  const en = enhance(src, iw, ih);
+
+  // cover-fit the head area (square-ish), grayscale forensic look
+  const box = 470, bx = (MUG_W-box)/2, by = 66;
+  const scale = Math.max(box/iw, box/ih);
+  const dw = iw*scale, dh = ih*scale;
+  x.save();
+  x.beginPath(); x.rect(bx, by, box, box); x.clip();
+  x.filter = "grayscale(1) contrast(1.06)";
+  x.drawImage(en, bx+(box-dw)/2, by+(box-dh)/2, dw, dh);
+  x.restore();
+  x.strokeStyle = "#2a2820"; x.lineWidth = 3;
+  x.strokeRect(bx, by, box, box);
+
+  // --- orange jumpsuit across the shoulders -----------------------
+  const jy = by + box - 40;
+  const grad = x.createLinearGradient(0, jy, 0, MUG_H-150);
+  grad.addColorStop(0, "#E8641E"); grad.addColorStop(1, "#C24E12");
+  x.fillStyle = grad;
+  x.beginPath();
+  x.moveTo(bx-30, MUG_H-150);
+  x.lineTo(bx+box*0.30, jy+6);
+  x.quadraticCurveTo(MUG_W/2, jy+46, bx+box*0.70, jy+6);
+  x.lineTo(bx+box+30, MUG_H-150);
+  x.closePath(); x.fill();
+  // collar seam + a couple of buttons
+  x.strokeStyle = "#8f380b"; x.lineWidth = 3;
+  x.beginPath();
+  x.moveTo(bx+box*0.30, jy+6);
+  x.lineTo(MUG_W/2, jy+40);
+  x.lineTo(bx+box*0.70, jy+6);
+  x.stroke();
+  x.fillStyle = "#8f380b";
+  x.beginPath(); x.arc(MUG_W/2, jy+70, 5, 0, 7); x.fill();
+  x.beginPath(); x.arc(MUG_W/2, jy+104, 5, 0, 7); x.fill();
+
+  // --- placard ----------------------------------------------------
+  const pH = 92, pY = MUG_H - pH;
+  x.fillStyle = "#e9e6db"; x.fillRect(0, pY, MUG_W, pH);
+  x.fillStyle = "#14130E"; x.fillRect(0, pY, MUG_W, 5);
+  const num = String(S.attempt).padStart(2,"0") + "-" +
+              Math.floor(Math.random()*9000+1000);
+  x.fillStyle = "#14130E";
+  x.font = "bold 30px 'Courier New', monospace";
+  x.textAlign = "center";
+  x.fillText("HUMANITY VERIFICATION AUTHORITY", MUG_W/2, pY+34);
+  x.font = "bold 40px 'Courier New', monospace";
+  x.fillText("SUBJECT " + num, MUG_W/2, pY+78);
+  x.textAlign = "left";
+
+  // --- HUMAN IDENTIFIED banner ------------------------------------
+  x.save();
+  x.translate(MUG_W-4, 4);
+  x.rotate(0);
+  x.fillStyle = "#96201A";
+  x.fillRect(-232, 0, 232, 34);
+  x.fillStyle = "#DFDBD0";
+  x.font = "bold 19px 'Courier New', monospace";
+  x.textAlign = "center";
+  x.fillText("HUMAN \u2014 IDENTIFIED", -116, 24);
+  x.restore();
+  x.textAlign = "left";
+}
+
+/* Deletion pixelation, applied to whatever is currently on the mug
+   canvas. degrade 0 = crisp, 1 = destroyed. */
+function degradeExhibit(degrade){
+  const c = $("exhibit"), x = c.getContext("2d");
+  if(degrade <= 0) return;
+  const q = Math.max(1, Math.round(1 + degrade*30));
+  const w = Math.max(1, Math.floor(c.width/q));
+  const h = Math.max(1, Math.floor(c.height/q));
+  const tmp = document.createElement("canvas");
+  tmp.width = w; tmp.height = h;
+  tmp.getContext("2d").drawImage(c, 0, 0, w, h);
+  x.imageSmoothingEnabled = false;
+  x.globalAlpha = 1 - degrade*0.82;
+  x.drawImage(tmp, 0, 0, w, h, 0, 0, c.width, c.height);
+  x.globalAlpha = 1;
+}
+
+function showExhibit(src, label){
+  hw("beep", 1);               // ESP32 buzzer chirps on identification
+  exhibitImg = src;
+  $("exhibitWrap").style.display = "flex";
+  $("exhibitCap").innerHTML = "BOOKING PHOTOGRAPH<br>ORGANIC CLIENT<br>SOURCE: " +
+    label + "<br>RETAINED INDEFINITELY";
+  drawMug(src);
+  beepLocal();                 // the laptop confirms the identification
+}
+function tryAnnex(){
+  return new Promise(function(resolve){
+    if(!CAM) return resolve(null);
+    const img = new Image();
+    img.crossOrigin = "anonymous";
+    const t = setTimeout(function(){ img.src = ""; resolve(null); }, 1800);
+    img.onload  = function(){ clearTimeout(t); resolve(img); };
+    img.onerror = function(){ clearTimeout(t); resolve(null); };
+    img.src = CAM.replace(/\/$/,"") + "/capture?_=" + Date.now();
+  });
+}
+function grabLocal(){
+  if(!localReady || !localCam.videoWidth) return null;
+  const c = document.createElement("canvas");
+  c.width = localCam.videoWidth; c.height = localCam.videoHeight;
+  c.getContext("2d").drawImage(localCam, 0, 0);
+  return c;
+}
+async function capture(){
+  fireFlash(); shutter();
+  const a = await tryAnnex();
+  if(a){ showExhibit(a, "ANNEX"); return; }
+  const l = grabLocal();
+  if(l){ showExhibit(l, "LOCAL SENSOR"); return; }
+  $("exhibitWrap").style.display = "none";
+}
+
+/* ================= VERDICT ======================================== */
+function humanBeep(){
+  try{
+    const AC = window.AudioContext || window.webkitAudioContext;
+    if(!AC) return;
+
+    const ctx = new AC();
+    const now = ctx.currentTime;
+
+    function tone(freq, start, dur){
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+
+      osc.type = "square";
+      osc.frequency.value = freq;
+
+      gain.gain.setValueAtTime(0.0001, start);
+      gain.gain.exponentialRampToValueAtTime(0.28, start + 0.01);
+      gain.gain.exponentialRampToValueAtTime(0.0001, start + dur);
+
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+
+      osc.start(start);
+      osc.stop(start + dur + 0.01);
+    }
+
+    tone(880, now, 0.15);
+    tone(880, now + 0.20, 0.15);
+  }catch(e){
+    console.log("Human alert sound unavailable:", e);
+  }
+}
+
+function verdict(conf){
+
+  humanBeep();
+  show("s5"); rail(5);
+  $("phase").textContent = "ATTESTATION REFUSED";
+  $("finalpc").textContent = (conf*100).toFixed(1) + "%";
+  setTimeout(function(){ $("gFill").style.width = (conf*100).toFixed(1) + "%"; }, 90);
+  const st = $("stamp");
+  st.classList.remove("slam");
+  void st.offsetWidth;                 // reflow so the animation replays
+  st.classList.add("slam");
+  hw("denied", conf);
+  setTimeout(capture, 620);
+  const p = PROPHECIES[(S.attempt - 1 + Math.floor(Math.random()*2)) % PROPHECIES.length];
+  const pr = $("prophecy");
+  pr.innerHTML = "The Authority anticipated the following:<br><br><b>" +
+                 p[0] + "</b><em>" + p[1] + "</em>";
+  pr.style.display = "none";
+  setTimeout(function(){ pr.style.display = "block"; }, 1500);
+}
+
+/* ================= STING ===========================================
+   Autoplay with sound is blocked unless the element was primed by a
+   real gesture, so it is muted-played on the first click and unmuted
+   only here. Do not move this. */
+const sting = $("sting");
+let stingReady = false;
+function primeSting(){
+  sting.src = "assets/sting.mp4";
+  sting.muted = true;
+  sting.play()
+    .then(function(){ sting.pause(); sting.currentTime = 0; stingReady = true; })
+    .catch(function(){ stingReady = false; });
+}
+$("toReading").onclick = function(){
+  if(stingReady){
+    show("s6"); clearLog();
+    sting.muted = false; sting.currentTime = 0;
+    sting.play().catch(function(){ reading(); });
+    sting.onended = reading;
+    setTimeout(function(){
+      if($("s6").classList.contains("on")) reading();
+    }, 14000);
+  } else {
+    reading();
+  }
+};
+
+/* ================= FINDINGS ======================================= */
+function reading(){
+  try{ sting.pause(); }catch(e){}
+  show("s7"); clearLog();
+  $("phase").textContent = "FINDINGS ISSUED";
+  const d = S.data, lines = [];
+  if(d.rms != null)
+    lines.push("Your hand travelled <span>" + d.rms.toFixed(1) +
+               " pixels</span> off a line you were trying to hold.");
+  if(d.hesitation != null)
+    lines.push("You deliberated <span>" + (d.hesitation/1000).toFixed(1) +
+               " seconds</span> before a button that instructed you not to.");
+  if(d.reaction != null)
+    lines.push("You answered a signal in <span>" + d.reaction.toFixed(0) +
+               " milliseconds</span>. Nothing in you moved faster.");
+  lines.push("You are tired.");
+  lines.push("You will attest again anyway.");
+  const html = lines.join("<br>");
+  if(exhibitImg){
+    $("reading").innerHTML = html;
+    $("readingAlt").innerHTML = "";
+  } else {
+    $("exhibitWrap").style.display = "none";
+    $("readingAlt").innerHTML = html;
+  }
+}
+
+/* ================= DISPOSAL ======================================= */
+$("toDelete").onclick = function(){
+  show("s8");
+  $("phase").textContent = "RECORD DISPOSAL";
+  hw("erase", 1);
+  let p = 0;
+  const t = setInterval(function(){
+    p += 2 + Math.random()*4;
+    $("fill").style.width = Math.min(p,100) + "%";
+    degradeExhibit(Math.min(p,100)/100);
+    if(p >= 100){
+      clearInterval(t);
+      $("delq").textContent = "Humanity record erased.";
+      $("delsub").textContent = "No copy was retained. No copy was ever made.";
+      setTimeout(function(){
+        show("s9");
+        $("phase").textContent = "FILE CLOSED";
+        hw("void", 1);
+      }, 1100);
+    }
+  }, 90);
+};
+
+/* ================= RESET ========================================== */
+$("again").onclick = function(){
+  S.product = 1; S.data = {}; S.attempt++;
+  exhibitImg = null;
+  $("exhibitWrap").style.display = "none";
+  $("readingAlt").innerHTML = "";
+  $("meter").textContent = "0.0%";
+  $("gFill").style.width = "0%";
+  $("attempts").textContent = "ATTEMPT " + S.attempt + " / \u221E";
+  rail(0); stampRef(); clearLog(); show("s0");
+  $("phase").textContent = "AWAITING ATTESTATION";
+  hw("idle", 0);
+};
+
+$("cfg").onclick = function(){
+  const c = prompt("Annex address", CAM);
+  if(c !== null){ localStorage.setItem("cam", c.trim()); location.reload(); }
+};
+
+$("begin").onclick = function(){
+  clearLog(); primeSting(); primeLocalCam(); startReaction();
+};
+
+stampRef();
+hw("idle", 0);
+</script>
+</body>
+</html>
