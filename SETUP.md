@@ -12,8 +12,8 @@ off the board is what makes it load instantly and stay responsive.
 
 ## WHAT CHANGED
 
-- **All LEDs removed.** The board now only sounds a buzzer.
-- **Three beeps, three sources.** The ESP32 buzzer, the laptop speaker, and
+- **All LEDs removed.** The board now only sounds a buzzer. ((Our original plan was to implement it as led with loading features etc))
+- **Two beeps, two sources.** The ESP32 buzzer, the laptop speaker, and
   the in-page shutter all fire the moment a human is identified.
 - **The exhibit is now a full booking mugshot** — the enhanced photo dropped
   onto a height chart, dressed in an orange jumpsuit, with a placard reading
@@ -32,7 +32,8 @@ Buzzer + leg to **GPIO 14**, - leg to **GND**. No buzzer? Set
 
 ## STEP 2 — Upload the sketch (5 min)
 
-New sketch, paste `hva_camera.ino`. Nothing needs editing.
+((BOARD TO BE SELECTED -- ESP 32 S3 DEVMODULE))
+New sketch, paste `hva_camera.ino`
 
     USB CDC On Boot    Enabled
     Flash Size         16MB (128Mb)
@@ -85,8 +86,7 @@ mugshot builds and all three beeps fire.
 
 ## THE BEEP
 
-Fires on identification from all three at once:
-- ESP32 buzzer  (`/state?p=beep`, plus a descending motif on the verdict)
+Fires on identification from all two at once:
 - laptop speaker (`beepLocal`, a two-tone square-wave alert)
 - in-page shutter noise
 
