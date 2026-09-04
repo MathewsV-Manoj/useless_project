@@ -57,7 +57,7 @@
 
   // ---- 2. INJECT THE CHARACTER ------------------------------
   const wrap = document.createElement('div');
-  wrap.id = 'officer-tom-wrap';
+  wrap.id = 'officer-tom-wrap'; 
   wrap.innerHTML = `
     <div id="tom-bubble">STAND BY.</div>
     <svg id="tom-svg" viewBox="0 0 200 240" xmlns="http://www.w3.org/2000/svg">
