@@ -125,7 +125,7 @@ For full setup details, see [`SETUP.md`](SETUP.md).
 
 #### Screenshots
 ![Interface](screenshots/interface.png)
-*The HVA verification interface — four solemn tests await.*
+*The HVA verification interface — three solemn tests await.*
 
 ![Verdict](screenshots/verdict.png)
 *HUMAN — IDENTIFIED. All three beeps fire simultaneously.*
