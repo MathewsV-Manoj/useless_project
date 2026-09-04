@@ -1,3 +1,8 @@
+<p align="center">
+  <img src="./useless-project-banner.png" width="100%">
+</p>
+
+
 # ANTI-HUMAN CAPTCHA🎯
 
 ## Basic Details
