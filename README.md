@@ -41,6 +41,12 @@ The **Humanity Verification Authority** — a fully offline, self-contained enfo
 - A computer or phone with Wi-Fi
 - *(Optional)* Piezo buzzer on GPIO 14
 
+  ## System Architecture
+
+<p align="center">
+  <img src="./architecture_diagram.jpeg" width="90%">
+</p>
+
 ### Implementation
 
 **For Software:**
