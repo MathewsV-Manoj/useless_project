@@ -486,7 +486,7 @@ let localReady = false;
 
 function primeLocalCam(){
   if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) return;
-  navigator.mediaDevices.getUserMedia({video:{width:640,height:480}})
+  navigator.mediaDevices.getUserMedia({video:{width:{ideal:1280},height:{ideal:720}}})
     .then(function(s){ localCam.srcObject = s; return localCam.play(); })
     .then(function(){ localReady = true; })
     .catch(function(){ localReady = false; });
@@ -675,6 +675,7 @@ function showExhibit(src, label){
     label + "<br>RETAINED INDEFINITELY";
   drawMug(src);
   beepLocal();                 // the laptop confirms the identification
+  if(window.OfficerTom) OfficerTom.react('verdict');
 }
 function tryAnnex(){
   return new Promise(function(resolve){
@@ -696,10 +697,12 @@ function grabLocal(){
 }
 async function capture(){
   fireFlash(); shutter();
-  const a = await tryAnnex();
-  if(a){ showExhibit(a, "ANNEX"); return; }
   const l = grabLocal();
   if(l){ showExhibit(l, "LOCAL SENSOR"); return; }
+  await new Promise(function(r){ setTimeout(r, 800); });
+  const l2 = grabLocal();
+  if(l2){ showExhibit(l2, "LOCAL SENSOR"); return; }
+  alert("Webcam not available. Please allow camera access and reload.");
   $("exhibitWrap").style.display = "none";
 }
 
@@ -861,5 +864,6 @@ $("begin").onclick = function(){
 stampRef();
 hw("idle", 0);
 </script>
+  <script src="officer-tom.js"></script>
 </body>
 </html>
