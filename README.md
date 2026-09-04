@@ -10,17 +10,20 @@
 ### Team Name: TUSKERS
 
 ### Team Members
-- **Team Lead:** Mathews V Manoj - Muthoot Institute of Technology and Science
+- **Member 1:** Mathews V Manoj - Muthoot Institute of Technology and Science
 - **Member 2:** Shone Reji - Muthoot Institute of Technology and Science
 
 ### Project Description
-A bureaucratic "reverse CAPTCHA" that treats being human as a suspicious activity. An ESP32-S3 hosts its own Wi-Fi network, subjects you to four solemn verification stages, and — the moment it decides you are in fact human — snaps your photo and books you into a stylized orange-jumpsuit mugshot with an interactive officer tom.
+A bureaucratic "reverse CAPTCHA" that treats being human as a suspicious activity. An ESP32-S3 hosts its own Wi-Fi network, subjects you to four solemn verification stages, and — the moment it decides you are in fact human — snaps your photo and books you into a stylized orange-jumpsuit mugshot with an interactive officer tom who catches the human at the end.
 
 ### The Problem (that doesn't exist)
-For decades, CAPTCHAs have humiliated humans by asking us to prove we're not robots. Meanwhile, no one has ever asked the far more important question: *what happens to the humans once we catch them?* Society has been dangerously lenient on confirmed carbon-based lifeforms.
+For decades, CAPTCHAs have humiliated humans by asking us to prove we're not robots. Meanwhile, no one has ever asked the far more important question: *what happens to the humans once we catch them?* Society has been dangerously lenient on confirmed carbon-based lifeforms.So we just tried to reverse that process.
 
 ### The Solution (that nobody asked for)
-The **Humanity Verification Authority** — a fully offline, self-contained enforcement agency in a single ESP32-S3. It runs Latency, Computation, Deviation, and Deliberation tests specifically rigged so that even the *best possible human* only reaches 95.3% machine-likeness. You fail for having a nervous system. Upon conviction, you are photographed, dressed in a virtual orange jumpsuit, placed against a height chart, labeled EXHIBIT A, and beeped at three times from three different sources. Justice.
+The **Humanity Verification Authority** — a fully offline, self-contained enforcement agency in a single ESP32-S3. It runs Latency, Computation, Deviation, and Deliberation tests specifically rigged so that even the *best possible human* only reaches 95.3% machine-likeness. You fail for having a nervous system. Upon conviction, you are photographed, dressed in a virtual orange jumpsuit, placed against a height chart, labeled EXHIBIT A, and beeped at three times from three different sources.
+
+## Interdisciplinary fields Included
+Embedded Systems & IoT, Web Development, Human–Computer Interaction, Data Processing, Audio Technology, and UI/UX Design.
 
 ## Technical Details
 
@@ -35,17 +38,53 @@ The **Humanity Verification Authority** — a fully offline, self-contained enfo
 - Python 3 (for local `http.server`)
 
 **For Hardware:**
-- ESP32-S3 development board (with PSRAM)
+- ESP32-S3 development board (with PSRAM) (ESP 23 S3 N16R8)
 - OV3660 camera module
 - USB cable
 - A computer or phone with Wi-Fi
-- *(Optional)* Piezo buzzer on GPIO 14
+
 
   ## System Architecture
 
 <p align="center">
   <img src="./architecture_diagram.jpeg" width="90%">
 </p>
+
+1. ESP32-S3 Camera Module
+
+The ESP32-S3 acts as the embedded processing and camera unit. It provides the Wi-Fi access point, hosts the local web interface, and captures an image when a human is detected.
+
+2. Web-Based Verification Layer
+
+A browser-based interface presents the reverse-CAPTCHA tests and collects the user's behavioural responses without requiring an external server.
+
+3. Behavioural Analysis Layer
+
+The system measures characteristics such as response latency, computation performance, hand movement deviation, and deliberation time to distinguish human-like behaviour from machine-like behaviour.
+
+4. Scoring & Decision Layer
+
+The collected measurements are processed using predefined thresholds and a scoring function to calculate a human-confidence score and produce the final verdict.
+
+5. Human Detection & Trigger Layer
+
+When the calculated result indicates human behaviour, the system triggers the next stage of the process—audio feedback and camera capture.
+
+6. Camera Capture Layer
+
+The ESP32-S3 camera captures the detected person's image. The captured frame is then transferred to the web interface for presentation.
+
+7. Mugshot Processing & Presentation Layer
+
+The captured photograph is transformed into the project's jail/mugshot-style visual, including the orange uniform effect and associated case information.
+
+8. Audio Feedback Layer
+
+The browser generates a beep sound when human behaviour is detected, providing immediate feedback without requiring a physical buzzer.
+
+9. Interactive UI Layer
+
+The interface presents the verification process, verdict, captured mugshot, and interactive elements such as the cat animation, making the system intentionally absurd and engaging. 
 
 ### Implementation
 
@@ -141,8 +180,7 @@ Optional buzzer: **+ leg → GPIO 14**, **− leg → GND** (avoid GPIO 4/5/6/7 
 ### Project Demo
 
 #### Video
-*[Add YouTube/Drive link to your demo video]*
-Shows the full verification process ending in a mugshot conviction.
+
 
 #### Additional Demos
 - Direct camera test: `http://192.168.4.1/capture`
