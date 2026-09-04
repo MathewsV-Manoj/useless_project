@@ -1,15 +1,15 @@
-# HVA — Humanity Verification Authority 🎯
+# ANTI-HUMAN CAPTCHA🎯
 
 ## Basic Details
 
-### Team Name: [Add your team name]
+### Team Name: TUSKERS
 
 ### Team Members
 - **Team Lead:** Mathews V Manoj - Muthoot Institute of Technology and Science
 - **Member 2:** Shone Reji - Muthoot Institute of Technology and Science
 
 ### Project Description
-A bureaucratic "reverse CAPTCHA" that treats being human as a suspicious activity. An ESP32-S3 hosts its own Wi-Fi network, subjects you to four solemn verification stages, and — the moment it decides you are in fact human — snaps your photo and books you into a stylized orange-jumpsuit mugshot.
+A bureaucratic "reverse CAPTCHA" that treats being human as a suspicious activity. An ESP32-S3 hosts its own Wi-Fi network, subjects you to four solemn verification stages, and — the moment it decides you are in fact human — snaps your photo and books you into a stylized orange-jumpsuit mugshot with an interactive officer tom.
 
 ### The Problem (that doesn't exist)
 For decades, CAPTCHAs have humiliated humans by asking us to prove we're not robots. Meanwhile, no one has ever asked the far more important question: *what happens to the humans once we catch them?* Society has been dangerously lenient on confirmed carbon-based lifeforms.
