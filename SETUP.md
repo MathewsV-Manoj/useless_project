@@ -23,6 +23,31 @@ off the board is what makes it load instantly and stay responsive.
 
 ---
 
+## LAPTOP MODE (Primary — Recommended)
+
+No board required. The whole thing runs in Chrome on your laptop, webcam and all.
+
+**Step 1 — Start the local server.** In the project folder:
+
+    python -m http.server 8000
+
+**Step 2 — Open the site.** In **Chrome**, go to **http://localhost:8000**.
+(Serving over `localhost` matters — opening the file directly blocks the webcam.)
+
+**Step 3 — Allow camera access** when Chrome prompts. The verdict mugshot is taken with your laptop webcam.
+
+**Step 4 — Click BEGIN ATTESTATION** and run all four tests. At the verdict the mugshot builds and the beeps fire.
+
+---
+
+## HARDWARE MODE (Bonus)
+
+Entirely optional. A physical ESP32-S3 build that serves the camera over its own Wi-Fi access point and chirps a buzzer. Not required to run or evaluate the project — do this only if you want the full absurd hardware experience.
+
+The board serves only the camera and sounds a buzzer:
+
+    board   http://192.168.4.1        wifi HVA-ANNEX / verify00
+
 ## STEP 1 — Buzzer (2 min)
 
 Buzzer + leg to **GPIO 14**, - leg to **GND**. No buzzer? Set
@@ -81,6 +106,7 @@ Chrome -> **http://localhost:8000**. Run all four tests. At the verdict the
 mugshot builds and all three beeps fire.
 
 ## STEP 8 — Aim the camera at the chair.
+
 
 ---
 
