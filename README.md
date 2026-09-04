@@ -14,13 +14,14 @@
 - **Member 2:** Shone Reji - Muthoot Institute of Technology and Science
 
 ### Project Description
-A bureaucratic "reverse CAPTCHA" that treats being human as a suspicious activity. An ESP32-S3 hosts its own Wi-Fi network, subjects you to three solemn verification stages, and — the moment it decides you are in fact human — snaps your photo and books you into a stylized orange-jumpsuit mugshot with an interactive officer tom who catches the human at the end.
+A bureaucratic "reverse CAPTCHA" that treats being human as a suspicious activity. It runs entirely in your browser using your **laptop webcam** — subjecting you to three solemn verification stages, and the moment it decides you are in fact human, it snaps your photo and books you into a stylized orange-jumpsuit mugshot with an interactive Officer Tom who catches the human at the end. No hardware required — an optional ESP32-S3 build exists purely as a bonus.
+
 
 ### The Problem (that doesn't exist)
-For decades, CAPTCHAs have humiliated humans by asking us to prove we're not robots. Meanwhile, no one has ever asked the far more important question: *what happens to the humans once we catch them?* Society has been dangerously lenient on confirmed carbon-based lifeforms.So we just tried to reverse that process.
 
 ### The Solution (that nobody asked for)
-The **Humanity Verification Authority** — a fully offline, self-contained enforcement agency in a single ESP32-S3. It runs Latency, Computation, Deviation, and Deliberation tests specifically rigged so that even the *best possible human* only reaches 95.3% machine-likeness. You fail for having a nervous system. Upon conviction, you are photographed, dressed in a virtual orange jumpsuit, placed against a height chart, labeled EXHIBIT A, and beeped at three times from three different sources.
+The **Humanity Verification Authority** — a fully offline, self-contained enforcement agency that runs right in **Chrome on your laptop**. It runs Latency, Computation, Deviation, and Deliberation tests specifically rigged so that even the *best possible human* only reaches 95.3% machine-likeness. You fail for having a nervous system. Upon conviction, your **laptop webcam** photographs you, dresses you in a virtual orange jumpsuit, places you against a height chart, labels you EXHIBIT A, and beeps at you three times. (For the truly committed, a bonus ESP32-S3 hardware build is documented separately.)
+
 
 ## Interdisciplinary fields Included
 Embedded Systems & IoT, Web Development, Human–Computer Interaction, Data Processing, Audio Technology, and UI/UX Design.
@@ -29,20 +30,20 @@ Embedded Systems & IoT, Web Development, Human–Computer Interaction, Data Proc
 
 ### Technologies/Components Used
 
-**For Software:**
-- C / C++ (Arduino framework)
-- HTML5, CSS3, JavaScript
+**For Software (Primary — Laptop Mode):**
+- HTML5, CSS3, JavaScript (runs entirely in Chrome)
+- `getUserMedia` / laptop webcam capture
 - Web Audio API (browser-generated beep)
-- ESP-IDF `esp32-camera` driver
-- Arduino IDE
 - Python 3 (for local `http.server`)
 
-**For Hardware:**
-- ESP32-S3 development board (with PSRAM) (ESP 23 S3 N16R8)
+**For Hardware (Bonus — Optional ESP32-S3 Mode):**
+- C / C++ (Arduino framework)
+- ESP-IDF `esp32-camera` driver
+- Arduino IDE
+- ESP32-S3 development board with PSRAM (ESP32-S3 N16R8)
 - OV3660 camera module
 - USB cable
 - A computer or phone with Wi-Fi
-
 
   ## System Architecture
 
@@ -88,36 +89,23 @@ The interface presents the verification process, verdict, captured mugshot, and 
 
 ### Implementation
 
-**For Software:**
-
-#### Installation
-1. Install **Arduino IDE** and add ESP32 board support via Boards Manager.
-2. Open `hva_camera.ino` in Arduino IDE.
-3. Select board: **ESP32S3 Dev Module** with these settings:
-   ```
-   USB CDC On Boot    : Enabled
-   Flash Size         : 16MB (128Mb)
-   PSRAM              : OPI PSRAM
-   Partition Scheme   : 16M Flash (3MB APP/9.9MB FATFS)
-   ```
-
-#### Run
-1. Connect ESP32-S3 via USB and upload the sketch.
-2. Reset the board.
-3. Connect your laptop/phone to Wi-Fi:
-   ```
-   SSID     : HVA-ANNEX
-   Password : verify00
-   ```
-4. Accept "No Internet" — that is normal.
-5. In the project folder, run:
+#### Run — Laptop Mode (Primary — Recommended)
+No hardware needed. Everything runs in your browser.
+1. In the project folder, start a local web server:
    ```
    python -m http.server 8000
    ```
-6. Open `http://localhost:8000` in Chrome.
-7. Click **BEGIN ATTESTATION** and submit to the verification process.
+2. Open `http://localhost:8000` in **Chrome**.
+3. Allow camera access when prompted (the verdict mugshot uses your laptop webcam).
+4. Click **BEGIN ATTESTATION** and submit to the verification process.
 
-For full setup details, see [`SETUP.md`](SETUP.md).
+> Note: the webcam capture requires a secure context, so serving over `localhost` (as above) is important — opening `index.html` directly as a `file://` will block the camera.
+
+#### Run — Bonus Hardware Mode (ESP32-S3)
+An optional physical build where an ESP32-S3 hosts its own Wi-Fi access point and captures the mugshot from an OV3660 camera. This is a bonus and is **not required** to run or evaluate the project.
+
+For full hardware wiring, flashing, and setup instructions, see [`SETUP.md`](SETUP.md).
+
 
 ### Project Documentation
 
@@ -175,16 +163,17 @@ Y6→12    Y5→10     Y4→8
 Y3→9     Y2→11
 VSYNC→6  HREF→7    PCLK→13
 ```
-Optional buzzer: **+ leg → GPIO 14**, **− leg → GND** (avoid GPIO 4/5/6/7 — those are camera lines).
 
 ### Project Demo
 
 #### Video
-
+_No demo video link has been added yet._
 
 #### Additional Demos
-- Direct camera test: `http://192.168.4.1/capture`
-- Camera status: `http://192.168.4.1/status`
+- **Laptop mode:** open `http://localhost:8000` in Chrome after starting the server above.
+- (Bonus hardware mode) Direct camera test: `http://192.168.4.1/capture`
+- (Bonus hardware mode) Camera status: `http://192.168.4.1/status`
+
 
 ## The Scoring (that guarantees you lose)
 
